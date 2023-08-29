@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
+  <title>Weather Report</title>
+</head>
+
+<body>
+
+  <header class="container">
+    <h1>Weather Forecast</h1>
+  </header>
+
+  <div class="search-container">
+    <form>
+      <h2>Search City:</h2>
+      <input type="text" id="name-city" placeholder="Portland, OR">
+      <button type="submit" id="search-btn">Search</button>
+    </form>
+    <h3>Recent Searches:</h3>
+    <div id="response"></div>
+  </div>
+
+  <div class="forecast-today"></div>
+  
+  <div class="forecast-container">
+    <h3 class="title"></h3>
+    <div class="forecast-week"></div>
+    <div id="weatherReport"></div>
+  </div>
+
+
+
+
+  <script src="./assets/js/script.js"></script>
+
+</body>
+
+</html>
