@@ -1,3 +1,4 @@
+
 // Global variable declarations
 var apiKey = '59a7f12740c8d248bd8602279058da5c';
 var city = document.querySelector('#name-city');
@@ -34,7 +35,6 @@ function getCity() {
 
 			// Calls location function and fetch request
 			getLocation(lat, lon);
-	
 		});
 }
 
@@ -68,22 +68,23 @@ function getLocation(lat, lon) {
 			let weatherImg = document.createElement('img');
 			weatherImg.src = `https://openweathermap.org/img/w/${weatherIcon}.png`;
 
+			// Formats the date to read properly
 			let date = dayjs(forecastToday.dt_txt).day(0, 'day');
 			let properFormatDate = date.format('MM-DD-YYYY');
 
+			// Creates element to hold and display the forecast for today
 			let weatherTodayHeader = document.createElement('div');
 			weatherTodayHeader.innerHTML = 
-				`<h3>${city} ` + `(${properFormatDate})` + `</h3>` +
-				`<p>Temperature: ${forecastToday.main.temp}&#176; F</p>` +
-				`<p>Humidity: ${forecastToday.main.humidity}%</p>` +
-				`<p>Wind: ${forecastToday.wind.speed} Mph`;
+				`<h3>${city} ` + `(${properFormatDate})` + `</h3>` + // City name, today's date
+				`<p>Temperature: ${forecastToday.main.temp}&#176; F</p>` + // Temperature today
+				`<p>Humidity: ${forecastToday.main.humidity}%</p>` + // Humidity today
+				`<p>Wind: ${forecastToday.wind.speed} Mph`; // Wind speed today
 
 				forecastTodayContainer.innerHTML = '';
-
 				forecastTodayContainer.appendChild(weatherImg);
 				forecastTodayContainer.appendChild(weatherTodayHeader);
-				forecastTodayContainer.style.backgroundColor = 'honeydew';
-				forecastTodayContainer.style.border = '2px solid black';
+				forecastTodayContainer.style.backgroundColor = 'honeydew'; // Applies styles dynamically
+				forecastTodayContainer.style.border = '2px solid black'; //  < < < < <
 
 			// Iterates through data list, sets 5 day forecast
 			for (let i = 1; i < 6; i++) {
@@ -99,11 +100,12 @@ function getLocation(lat, lon) {
 				let wind = forecast.wind.speed; // Wind speed
 				let humidity = forecast.main.humidity; // Humidity level
 
+				// Creates a container to hold the five day forecast
 				var forecastContainer = document.createElement('div');
 				forecastContainer.classList.add('forecast-week');
-				forecastContainer.appendChild(dailyWeatherImg);
+				forecastContainer.appendChild(dailyWeatherImg); // TODO: Append weather icon inside container
 
-				// Prints results to page dynamically
+				// Displays results to page dynamically
 				var locationSearch = document.createElement('li');
 				forecastTitle.textContent = '5-Day Forecast: '
 				locationSearch.innerHTML =
@@ -152,17 +154,18 @@ function storedCities() {
 	}
 }
 
-// Runs storedCities function after page loads
+// Runs storedCities() function after page loads
 window.addEventListener('load', function () {
 	storedCities();
 });
 
-// Event listener for submit button click, runs getCity()
+// Event listener for submit button click, runs getCity() function
 citySearch.addEventListener('click', function (event) {
 	event.preventDefault();
 	getCity();
 });
 
+// TODO: Fix recent searches to re-apply search function
 // cityContainer.addEventListener('click', function(event) {
 // 	event.preventDefault();
 // 	weatherContainer.innerHTML = '';
