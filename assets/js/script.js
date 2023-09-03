@@ -1,4 +1,3 @@
-
 // Global variable declarations
 var apiKey = '59a7f12740c8d248bd8602279058da5c';
 var city = document.querySelector('#name-city');
@@ -7,36 +6,39 @@ var cityContainer = document.getElementById('response');
 var forecastTitle = document.querySelector('.title');
 var weatherContainer = document.getElementById('weatherReport');
 var forecastItem = document.querySelector('.report-item');
+var recentCities = [];
 
 // Fetch request to get city name from api
 function getCity() {
 	var cityName = city.value;
-	var cityQuery =
-		'https://api.openweathermap.org/geo/1.0/direct?q=' +
-		cityName +
-		'&limit=1&appid=' +
-		apiKey;
 
-	// Fetch request method
-	fetch(cityQuery)
-		.then(function (response) {
-			return response.json();
-		})
-		.then(function (data) {
-			// Dynamically creates button with searched city below search bar
-			var recentSearch = document.createElement('button');
-			recentSearch.textContent = cityName;
-			cityStorageContainer(data[0]);
-      cityContainer.appendChild(recentSearch);
+		var cityQuery =
+			'https://api.openweathermap.org/geo/1.0/direct?q=' +
+			cityName +
+			'&limit=1&appid=' +
+			apiKey;
 
-			// Declares latitude and longitude variables for next api call
-			let lat = data[0].lat;
-			let lon = data[0].lon;
+		// Fetch request
+		fetch(cityQuery)
+			.then(function (response) {
+				return response.json();
+			})
+			.then(function (data) {
+				// Dynamically creates button with searched city below search bar
+				var recentSearch = document.createElement('button');
+				recentSearch.textContent = cityName;
+				cityStorageContainer(data[0]);
+				cityContainer.appendChild(recentSearch);
 
-			// Calls location function and fetch request
-			getLocation(lat, lon);
-		});
-}
+				// Declares latitude and longitude variables for next api call
+				let lat = data[0].lat;
+				let lon = data[0].lon;
+
+				// Calls location function and fetch request
+				getLocation(lat, lon);
+			});
+	} 
+		
 
 // Fetch request to get precise location of city to draw weather patterns
 function getLocation(lat, lon) {
@@ -61,7 +63,8 @@ function getLocation(lat, lon) {
 			// Today's weather
 			let city = data.city.name;
 			let forecastToday = data.list[0];
-			let forecastTodayContainer = document.querySelector('.forecast-today');
+			let forecastTodayContainer =
+				document.querySelector('.forecast-today');
 			let weatherIcon = forecastToday.weather[0].icon;
 
 			// Creates the weather icon image ex. sunny, rainy, cloudy, etc.
@@ -74,17 +77,20 @@ function getLocation(lat, lon) {
 
 			// Creates element to hold and display the forecast for today
 			let weatherTodayHeader = document.createElement('div');
-			weatherTodayHeader.innerHTML = 
-				`<h3>${city} ` + `(${properFormatDate})` + `</h3>` + // City name, today's date
+			weatherTodayHeader.innerHTML =
+				`<h3>${city} ` +
+				`(${properFormatDate})` +
+				`</h3>` + // City name, today's date
 				`<p>Temperature: ${forecastToday.main.temp}&#176; F</p>` + // Temperature today
 				`<p>Humidity: ${forecastToday.main.humidity}%</p>` + // Humidity today
 				`<p>Wind: ${forecastToday.wind.speed} Mph`; // Wind speed today
 
-				forecastTodayContainer.innerHTML = '';
-				forecastTodayContainer.appendChild(weatherImg);
-				forecastTodayContainer.appendChild(weatherTodayHeader);
-				forecastTodayContainer.style.backgroundColor = 'honeydew'; // Applies styles dynamically
-				forecastTodayContainer.style.border = '2px solid black'; //  < < < < <
+			forecastTodayContainer.innerHTML = '';
+			forecastTodayContainer.appendChild(weatherImg);
+			forecastTodayContainer.appendChild(weatherTodayHeader);
+			forecastTodayContainer.style.backgroundColor = '#0b1fd4'; // Applies styles dynamically
+			forecastTodayContainer.style.color = 'whitesmoke';
+			forecastTodayContainer.style.border = '2px solid black'; //  < < < < <
 
 			// Iterates through data list, sets 5 day forecast
 			for (let i = 1; i < 6; i++) {
@@ -92,10 +98,11 @@ function getLocation(lat, lon) {
 				let dailyDate = dayjs(forecast.dt_txt).day(i, 'day');
 				let dailyDateFormat = dailyDate.format('MM-DD-YYYY');
 				let dailyIcon = forecast.weather[0].icon;
-	
-				// Declare variables using dot notation
+
+				// Creates daily weather icon
 				let dailyWeatherImg = document.createElement('img');
 				dailyWeatherImg.src = `https://openweathermap.org/img/w/${dailyIcon}.png`;
+
 				let temp = forecast.main.temp; // Current temperature
 				let wind = forecast.wind.speed; // Wind speed
 				let humidity = forecast.main.humidity; // Humidity level
@@ -103,11 +110,10 @@ function getLocation(lat, lon) {
 				// Creates a container to hold the five day forecast
 				var forecastContainer = document.createElement('div');
 				forecastContainer.classList.add('forecast-week');
-				forecastContainer.appendChild(dailyWeatherImg); // TODO: Append weather icon inside container
 
 				// Displays results to page dynamically
 				var locationSearch = document.createElement('li');
-				forecastTitle.textContent = '5-Day Forecast: '
+				forecastTitle.textContent = '5-Day Forecast: ';
 				locationSearch.innerHTML =
 					`${dailyDateFormat}` +
 					'<br>' +
@@ -123,7 +129,9 @@ function getLocation(lat, lon) {
 					'Wind: ' +
 					wind +
 					' Mph';
-				
+				locationSearch.appendChild(dailyWeatherImg);
+				dailyWeatherImg.style.alignSelf = 'flex-start';
+
 				forecastContainer.appendChild(locationSearch);
 				weatherContainer.appendChild(forecastContainer);
 			}
@@ -165,11 +173,35 @@ citySearch.addEventListener('click', function (event) {
 	getCity();
 });
 
-// TODO: Fix recent searches to re-apply search function
-// cityContainer.addEventListener('click', function(event) {
-// 	event.preventDefault();
-// 	weatherContainer.innerHTML = '';
-// 	getLocation();
-// });
 
+// Event listener to HTML id on recently searched items
+document.getElementById('response').addEventListener('click', function(event) {
+	if (event.target && event.target.nodeName === 'BUTTON') {
+		const cityName = event.target.textContent;
 
+		retrieveSearchedCity(cityName);
+	}
+});
+
+// Creates new search on recently searched city
+function retrieveSearchedCity(cityName) {
+	const cityQuery = 
+	'https://api.openweathermap.org/geo/1.0/direct?q=' +
+    cityName +
+    '&limit=1&appid=' +
+    apiKey;
+
+		// Perform another fetch request on recently searched city
+		fetch(cityQuery)
+		.then(function(response) {
+			return response.json()
+		})
+		.then(function(data) {
+			weatherContainer.innerHTML = '';
+
+			let lat = data[0].lat;
+			let lon = data[0].lon;
+
+			getLocation(lat, lon);
+		}); 
+}
