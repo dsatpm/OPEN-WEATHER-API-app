@@ -21,7 +21,7 @@ Screenshot of the project: <br>
 
 ## Credits
 
-This project was created by [dsatpm](https://twitter.com/__dsatpm) using the [OpenWeatherAPI](https://openweathermap.org/api). I also referenced [ChatGPT](https://chat.openai.com), [webdocs](https://developer.mozilla.org), and [Google](https://google.com) for research and documentation to get everything working properly and functionally. Additional help on API functionality from Cody Schwengler.
+This project was created by [dsatpm](https://twitter.com/__dsatpm) using the [OpenWeatherAPI](https://openweathermap.org/api) and [Day.js](https://day.js.org). I also referenced [ChatGPT](https://chat.openai.com), [webdocs](https://developer.mozilla.org), and [Google](https://google.com) for research and documentation to get everything working properly and functionally. Additional help on API functionality from Cody Schwengler.
 
 
 ## Contact
