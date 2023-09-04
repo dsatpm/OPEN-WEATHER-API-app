@@ -12,33 +12,32 @@ var recentCities = [];
 function getCity() {
 	var cityName = city.value;
 
-		var cityQuery =
-			'https://api.openweathermap.org/geo/1.0/direct?q=' +
-			cityName +
-			'&limit=1&appid=' +
-			apiKey;
+	var cityQuery =
+		'https://api.openweathermap.org/geo/1.0/direct?q=' +
+		cityName +
+		'&limit=1&appid=' +
+		apiKey;
 
-		// Fetch request
-		fetch(cityQuery)
-			.then(function (response) {
-				return response.json();
-			})
-			.then(function (data) {
-				// Dynamically creates button with searched city below search bar
-				var recentSearch = document.createElement('button');
-				recentSearch.textContent = cityName;
-				cityStorageContainer(data[0]);
-				cityContainer.appendChild(recentSearch);
+	// Fetch request
+	fetch(cityQuery)
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			// Dynamically creates button with searched city below search bar
+			var recentSearch = document.createElement('button');
+			recentSearch.textContent = cityName;
+			cityStorageContainer(data[0]);
+			cityContainer.appendChild(recentSearch);
 
-				// Declares latitude and longitude variables for next api call
-				let lat = data[0].lat;
-				let lon = data[0].lon;
+			// Declares latitude and longitude variables for next api call
+			let lat = data[0].lat;
+			let lon = data[0].lon;
 
-				// Calls location function and fetch request
-				getLocation(lat, lon);
-			});
-	} 
-		
+			// Calls location function and fetch request
+			getLocation(lat, lon);
+		});
+}
 
 // Fetch request to get precise location of city to draw weather patterns
 function getLocation(lat, lon) {
@@ -129,6 +128,7 @@ function getLocation(lat, lon) {
 					'Wind: ' +
 					wind +
 					' Mph';
+
 				locationSearch.appendChild(dailyWeatherImg);
 				dailyWeatherImg.style.alignSelf = 'flex-start';
 
@@ -173,9 +173,8 @@ citySearch.addEventListener('click', function (event) {
 	getCity();
 });
 
-
 // Event listener to HTML id on recently searched items
-document.getElementById('response').addEventListener('click', function(event) {
+document.getElementById('response').addEventListener('click', function (event) {
 	if (event.target && event.target.nodeName === 'BUTTON') {
 		const cityName = event.target.textContent;
 
@@ -185,23 +184,23 @@ document.getElementById('response').addEventListener('click', function(event) {
 
 // Creates new search on recently searched city
 function retrieveSearchedCity(cityName) {
-	const cityQuery = 
-	'https://api.openweathermap.org/geo/1.0/direct?q=' +
-    cityName +
-    '&limit=1&appid=' +
-    apiKey;
+	const cityQuery =
+		'https://api.openweathermap.org/geo/1.0/direct?q=' +
+		cityName +
+		'&limit=1&appid=' +
+		apiKey;
 
-		// Perform another fetch request on recently searched city
-		fetch(cityQuery)
-		.then(function(response) {
-			return response.json()
+	// Perform another fetch request on recently searched city
+	fetch(cityQuery)
+		.then(function (response) {
+			return response.json();
 		})
-		.then(function(data) {
+		.then(function (data) {
 			weatherContainer.innerHTML = '';
 
 			let lat = data[0].lat;
 			let lon = data[0].lon;
 
 			getLocation(lat, lon);
-		}); 
+		});
 }
